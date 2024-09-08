@@ -1,4 +1,4 @@
-name: Deploy Serverless Application
+name: Deploy IHUB Application
 
 on:
   push:
@@ -41,7 +41,7 @@ jobs:
 
       # Step 6: Deploy the Serverless application
       - name: Deploy to AWS
-        run: serverless deploy --stage prod  # You can set different stages like dev/staging/prod
+        run: serverless deploy
 
       # Optional: Post-deployment notification (slack, email, etc.)
       # You can add steps here to notify teams, such as posting a message to Slack or sending an email.
