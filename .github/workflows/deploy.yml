@@ -3,10 +3,10 @@ name: Deploy IHUB Application
 on:
   push:
     branches:
-      - main  # Deploy when code is pushed to the main branch
+      - main
   pull_request:
     branches:
-      - main  # Optional: Run tests on pull requests to main
+      - main
 
 jobs:
   deploy:
@@ -27,6 +27,10 @@ jobs:
       - name: Install Serverless Framework
         run: npm install -g serverless
 
+      # Step 4: Install SST globally
+      - name: Install SST globally
+        run: npm install -g sst
+
       # Step 4: Install project dependencies (if any)
       - name: Install dependencies
         run: npm install
@@ -41,7 +45,4 @@ jobs:
 
       # Step 6: Deploy the Serverless application
       - name: Deploy to AWS
-        run: serverless deploy
-
-      # Optional: Post-deployment notification (slack, email, etc.)
-      # You can add steps here to notify teams, such as posting a message to Slack or sending an email.
+        run: sst deploy
