@@ -1,0 +1,47 @@
+name: Deploy Serverless Application
+
+on:
+  push:
+    branches:
+      - main  # Deploy when code is pushed to the main branch
+  pull_request:
+    branches:
+      - main  # Optional: Run tests on pull requests to main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js (required for Serverless Framework)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # Use the Node.js version compatible with Serverless
+
+      # Step 3: Install serverless framework globally
+      - name: Install Serverless Framework
+        run: npm install -g serverless
+
+      # Step 4: Install project dependencies (if any)
+      - name: Install dependencies
+        run: npm install
+
+      # Step 5: Configure AWS credentials (from GitHub secrets)
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # Step 6: Deploy the Serverless application
+      - name: Deploy to AWS
+        run: serverless deploy --stage prod  # You can set different stages like dev/staging/prod
+
+      # Optional: Post-deployment notification (slack, email, etc.)
+      # You can add steps here to notify teams, such as posting a message to Slack or sending an email.
