@@ -36,7 +36,7 @@ jobs:
       - name: Build Go functions
         run: |
           cd packages/functions
-          mkdir -p .cache
+          sudo mkdir -p .cache
           export GOPATH="$CI_PROJECT_DIR/.cache"
           npm ci
           go mod download
