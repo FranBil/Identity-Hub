@@ -37,7 +37,7 @@ jobs:
       - name: Install SST globally
         run: npm install -g sst
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: '1.18'
       - name: Build Go functions
