@@ -8,42 +8,42 @@ on:
     branches:
       - main
 
+concurrency:
+  group: merge-${{ github.ref }}
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
     steps:
-      # Step 1: Checkout the code
       - name: Checkout repository
-        uses: actions/checkout@v2
-
+        uses: actions/checkout@v3
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
-
       - name: Install dependencies
         run: npm install
-
       - name: Install SST globally
         run: npm install -g sst
-
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
           go-version: '1.18'
-
       - name: Build Go functions
         run: |
           GOOS=linux GOARCH=amd64 go build -o packages/functions/create-person/main packages/functions/create-person/main.go
           GOOS=linux GOARCH=amd64 go build -o packages/functions/list-person/main packages/functions/list-person/main.go
-
-      - name: Configure AWS Credentials
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
+           role-to-assume: arn:aws:iam::185507759994:role/GitHub
+           role-duration-seconds: 14390
+           aws-region: ${{ secrets.AWS_REGION }}
       - name: Deploy to AWS
-        run: npx sst deploy
+        run: |
+          npm i && npx sst deploy
