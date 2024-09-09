@@ -1,4 +1,4 @@
-name: Deploy IHUB Application
+name: Deploy IHUB App
 
 on:
   push:
@@ -14,28 +14,38 @@ jobs:
     
     steps:
       # Step 1: Checkout the code
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js (required for Serverless Framework)
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v2
         with:
-          node-version: '18'  # Use the Node.js version compatible with Serverless
+          node-version: '18'
 
-      # Step 3: Install serverless framework globally
-      - name: Install Serverless Framework
-        run: npm install -g serverless
-
-      # Step 4: Install SST globally
-      - name: Install SST globally
-        run: npm install -g sst
-
-      # Step 4: Install project dependencies (if any)
       - name: Install dependencies
         run: npm install
 
-      # Step 5: Configure AWS credentials (from GitHub secrets)
+      - name: Install SST globally
+        run: npm install -g sst
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.18'
+
+      - name: Build Go functions
+        run: |
+          cd packages/functions
+          mkdir -p .cache
+          export GOPATH="$CI_PROJECT_DIR/.cache"
+          npm ci
+          go mod download
+          go mod vendor
+          export GOPATH=$GOPATH:$(pwd)
+          GOOS=linus GOARCH=amd64 go build -o packages/functions/create-person/main packages/functions/create-person/main.go
+          GOOS=linus GOARCH=amd64 go build -o packages/functions/list-person/main packages/functions/list-person/main.go
+
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -43,6 +53,5 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # Step 6: Deploy the Serverless application
       - name: Deploy to AWS
         run: npx sst deploy

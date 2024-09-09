@@ -1,5 +1,5 @@
 import { SSTConfig } from "sst";
-import { PersonStack } from "./stacks/PersonStack";
+import { PersonApiStack } from "./stacks/PersonStack";
 
 export default {
   config(_input) {
@@ -9,6 +9,6 @@ export default {
     };
   },
   stacks(app) {
-    app.stack(PersonStack);
+    app.stack(PersonApiStack);
   }
 } satisfies SSTConfig;
