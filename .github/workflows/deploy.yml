@@ -36,12 +36,12 @@ jobs:
       - name: Build Go functions
         run: |
           cd packages/functions
-          sudo mkdir -p .cache
-          export GOPATH="$CI_PROJECT_DIR/.cache"
+          # sudo mkdir -p .cache
+          # export GOPATH="$CI_PROJECT_DIR/.cache"
           npm ci
           go mod download
           go mod vendor
-          export GOPATH=$GOPATH:$(pwd)
+          # export GOPATH=$GOPATH:$(pwd)
           GOOS=linus GOARCH=amd64 go build -o packages/functions/create-person/main packages/functions/create-person/main.go
           GOOS=linus GOARCH=amd64 go build -o packages/functions/list-person/main packages/functions/list-person/main.go
 
