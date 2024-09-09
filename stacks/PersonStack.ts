@@ -18,7 +18,7 @@ export function PersonApiStack({ stack }: StackContext) {
     });
 
     const listPersonFunction = new Function(stack, "LetPersons", {
-        handler: "packages/functions/list-person/main",
+        handler: "packages/functions/list-persons/main.main",
         runtime: "go1.x",
         environment: {
             TABLE_NAME: "PersonTable"
@@ -26,7 +26,7 @@ export function PersonApiStack({ stack }: StackContext) {
     });
 
     const createPersonFunction = new Function(stack, "CreatePerson", {
-        handler: "packages/functions/create-person/main",
+        handler: "packages/functions/create-person/main.main",
         runtime: "go1.x",
         environment: {
             TABLE_NAME: "PersonTable"
