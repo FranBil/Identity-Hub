@@ -42,8 +42,8 @@ jobs:
           # go mod download
           # go mod vendor
           # export GOPATH=$GOPATH:$(pwd)
-          GOOS=linus GOARCH=amd64 go build -o packages/functions/create-person/main packages/functions/create-person/main.go
-          GOOS=linus GOARCH=amd64 go build -o packages/functions/list-person/main packages/functions/list-person/main.go
+          GOOS=linus go build -o packages/functions/create-person/main packages/functions/create-person/main.go
+          GOOS=linus go build -o packages/functions/list-person/main packages/functions/list-person/main.go
 
 
       - name: Configure AWS Credentials
