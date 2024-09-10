@@ -6,7 +6,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/FranBil/Identity-Hub/packages/dynamodb"
+	"Identity-Hub/packages/dynamodb"
 )
 
 type response events.APIGatewayProxyResponse
