@@ -2,7 +2,11 @@
 
 Identity-Hub is a serverless application built with GoLang and TypeScript using [Serverless Stack](https://sst.dev) (SST). The service exposes endpoints to manage Person Information.
 
-## Project Structure
+## Project structure
+
+![Architecture diagram](./IHUB.jpg)
+
+## Folder Structure
 
 The following directories are the most important ones in the project:
 - `packages/functions`: Contains the Lambda function that is triggered by API Gateway.
