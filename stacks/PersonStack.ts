@@ -17,8 +17,8 @@ export function PersonApiStack({ stack }: StackContext) {
         primaryIndex: { partitionKey: "id" },
     });
 
-    const listPersonFunction = new Function(stack, "LetPersons", {
-        handler: "packages/functions/list-persons/main.go",
+    const listPersonFunction = new Function(stack, "GetAllPersons", {
+        handler: "packages/lambda/list-persons/main.go",
         runtime: "go1.x",
         environment: {
             TABLE_NAME: "PersonTable"
@@ -26,7 +26,7 @@ export function PersonApiStack({ stack }: StackContext) {
     });
 
     const createPersonFunction = new Function(stack, "CreatePerson", {
-        handler: "packages/functions/create-person/main.go",
+        handler: "packages/lambda/create-person/main.go",
         runtime: "go1.x",
         environment: {
             TABLE_NAME: "PersonTable"

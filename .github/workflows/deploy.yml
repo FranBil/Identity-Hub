@@ -43,8 +43,8 @@ jobs:
       - name: Build Go functions
         run: |
 
-          GOOS=linux GOARCH=amd64 go build -o packages/functions/create-person/main ./packages/functions/create-person/main.go
-          GOOS=linux GOARCH=amd64 go build -o packages/functions/list-persons/main  ./packages/functions/list-persons/main.go
+          GOOS=linux GOARCH=amd64 go build -o packages/lambda/create-person/main ./packages/lambda/create-person/main.go
+          GOOS=linux GOARCH=amd64 go build -o packages/lambda/list-persons/main  ./packages/lambda/list-persons/main.go
 
 
       - name: Deploy to AWS
