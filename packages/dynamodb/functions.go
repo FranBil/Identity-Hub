@@ -10,36 +10,35 @@ import (
 )
 
 type PersonInfo struct {
-	FirstName string `json:"firstName`
-	LastName string `json:"firstName`
-	PhoneNumber string `json:"phoneNumber`
-	Address string `json:"address`
+	FirstName   string `json:"firstName"`
+	LastName    string `json:"lastName"`
+	PhoneNumber string `json:"phoneNumber"`
+	Address     string `json:"address"`
 }
 
 var sess = session.Must(session.NewSessionWithOptions(session.Options{
-    SharedConfigState: session.SharedConfigEnable,
+	SharedConfigState: session.SharedConfigEnable,
 }))
 
 // Create DynamoDB client
 var svc = dynamodb.New(sess)
 
- var tableName = "PersonsTable"
-
+var tableName = "PersonsTable"
 
 func SavePersonInfo(person PersonInfo) error {
 	item, err := dynamodbattribute.MarshalMap(person)
 	if err != nil {
-		return fmt.Errorf("Error marshalling map: %s", err)
+		return fmt.Errorf("error marshalling map: %s", err)
 	}
 
 	input := &dynamodb.PutItemInput{
 		Item:      item,
 		TableName: aws.String(tableName),
 	}
-	
+
 	_, err = svc.PutItem(input)
 	if err != nil {
-		return fmt.Errorf("Error inserting Item: %s", err)
+		return fmt.Errorf("error inserting Item: %s", err)
 	}
 	return nil
 }

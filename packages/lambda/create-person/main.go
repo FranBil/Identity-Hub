@@ -16,10 +16,12 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 
 	err := json.Unmarshal([]byte(request.Body), &person)
 
+	fmt.Printf("testing ",person.FirstName)
+
 	if err != nil {
 		return response{
 			StatusCode: 400,
-			Body:  fmt.Sprintf("Invalid request body: %s", err),
+			Body:       fmt.Sprintf("Invalid request body: %s", err),
 		}, nil
 	}
 
@@ -27,13 +29,13 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 	if err != nil {
 		return response{
 			StatusCode: 500,
-			Body:  fmt.Sprintf("Error saving person info: %s", err),
-			}, nil
-			}
-			return response{
-				StatusCode: 200,
-				Body:  "Person info saved successfully",
-				}, nil
+			Body:       fmt.Sprintf("Error saving person info: %s", err),
+		}, nil
+	}
+	return response{
+		StatusCode: 200,
+		Body:       "Person info saved successfully",
+	}, nil
 }
 
 func main() {
