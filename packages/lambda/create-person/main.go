@@ -6,7 +6,7 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"Identity-Hub/packages/dynamodb"
+	"identity-hub/packages/dynamodb"
 )
 
 type response events.APIGatewayProxyResponse
@@ -23,7 +23,7 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 		}, nil
 	}
 
-	err := dynamodb.SavePersonInfo(request)
+	err = dynamodb.SavePersonInfo(person)
 	if err != nil {
 		return response{
 			StatusCode: 500,

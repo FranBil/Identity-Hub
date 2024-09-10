@@ -1,4 +1,4 @@
-module main
+module identity-hub
 
 go 1.19
 
