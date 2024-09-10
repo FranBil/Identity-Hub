@@ -33,15 +33,18 @@ export function PersonApiStack({ stack }: StackContext) {
         },
     });
 
-    // personsTable.grantRead(listPersonFunction);
-    // personsTable.grantReadWrite(createPersonFunction);
-
     const api = new Api(stack, "Api", {
+        defaults: {
+            function: {
+                bind: [personsTable]
+            },
+        },
         routes: {
-            "GET /persons": listPersonFunction,
-            "POST /persons": createPersonFunction,
+            "GET /v1/persons": listPersonFunction,
+            "POST /v1/persons": createPersonFunction,
         }
     });
+
     stack.addOutputs({
         ApiEndpoint: api.url,
       });
