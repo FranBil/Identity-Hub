@@ -42,8 +42,9 @@ jobs:
           go-version: '1.18'
       - name: Build Go functions
         run: |
-          GOOS=linux GOARCH=amd64 go build -o packages/functions/create-person/main ./../packages/functions/create-person/main.go
-          GOOS=linux GOARCH=amd64 go build -o packages/functions/list-persons/main  ./../packages/functions/list-persons/main.go
+
+          GOOS=linux GOARCH=amd64 go build -o packages/functions/create-person/main ./packages/functions/create-person/main.go
+          GOOS=linux GOARCH=amd64 go build -o packages/functions/list-persons/main  ./packages/functions/list-persons/main.go
 
 
       - name: Deploy to AWS
