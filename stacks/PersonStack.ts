@@ -22,7 +22,7 @@ export function PersonApiStack({ stack }: StackContext) {
         description: "Function for list Persons",
         runtime: "go1.x",
         environment: {
-            TABLE_NAME: "PersonTable"
+            TABLE_NAME: "PersonsTable"
         },
         bind: [personsTable]
     });
@@ -32,7 +32,7 @@ export function PersonApiStack({ stack }: StackContext) {
         description: "Function for create Person",
         runtime: "go1.x",
         environment: {
-            TABLE_NAME: "PersonTable"
+            TABLE_NAME: "PersonsTable"
         },
         bind: [personsTable]
     });
