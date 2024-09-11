@@ -18,7 +18,7 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 		return response{StatusCode: 500}, err
 	}
 
-	log.Info().Msg("Successfully fetched Persons: %s", fmt.Sprint(items))
+	log.Info().Msg("Successfully fetched Persons: "+ fmt.Sprint(items))
 	return response{
 		Body: fmt.Sprint(items),
 		StatusCode: 200,

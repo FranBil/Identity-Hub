@@ -62,7 +62,7 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 			}, nil
 		}
 	}
-	log.Info().Msg("Successfully saved body: %s", fmt.Sprint(items))
+	log.Info().Msg("Successfully saved body:" + fmt.Sprint(item))
 	return response{
 		StatusCode: 200,
 		Body:       "Person info saved successfully",
