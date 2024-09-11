@@ -13,3 +13,14 @@ node_modules
 
 # local env files
 .env*.local
+
+# golang vendor (dependencies) directory
+vendor
+
+# golang output binary directory
+bin
+.bin
+
+# IDE localfiles
+.idea
+.vscode

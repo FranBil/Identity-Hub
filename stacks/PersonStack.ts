@@ -1,4 +1,5 @@
-import { Api, Function, StackContext, Table } from "sst/constructs";
+import { Api, Function, StackContext, Table, Topic } from "sst/constructs";
+// import * as sns from "aws-cdk-lib/aws-sns";
 
 export function PersonApiStack({ stack }: StackContext) {
     const personsTable = new Table(stack, "PersonsTable", {
@@ -8,40 +9,43 @@ export function PersonApiStack({ stack }: StackContext) {
             },
         },
         fields: {
-            id: "string",
             firstName: "string",
             lastName: "string",
             phoneNumber: "string",
             address: "string",
         },
-        primaryIndex: { partitionKey: "id" },
+        primaryIndex: { partitionKey: "lastName", sortKey: "phoneNumber" },
     });
 
-    const listPersonFunction = new Function(stack, "LetPersons", {
-        handler: "packages/functions/list-persons/main.go",
+    const personCreatedTopic = new Topic(stack, "PersonCreatedTopic");
+
+    const listPersonFunction = new Function(stack, "GetAllPersons", {
+        handler: "packages/lambda/list-persons/main.go",
+        description: "Function for list Persons",
         runtime: "go1.x",
         environment: {
-            TABLE_NAME: "PersonTable"
+            TABLE_NAME: "PersonsTable"
         },
+        bind: [personsTable]
     });
 
     const createPersonFunction = new Function(stack, "CreatePerson", {
-        handler: "packages/functions/create-person/main.go",
+        handler: "packages/lambda/create-person/main.go",
+        description: "Function for create Person",
         runtime: "go1.x",
         environment: {
-            TABLE_NAME: "PersonTable"
+            TABLE_NAME: "PersonsTable"
         },
+        bind: [personsTable, personCreatedTopic]
     });
-
-    // personsTable.grantRead(listPersonFunction);
-    // personsTable.grantReadWrite(createPersonFunction);
 
     const api = new Api(stack, "Api", {
         routes: {
-            "GET /persons": listPersonFunction,
-            "POST /persons": createPersonFunction,
+            "GET /v1/persons": listPersonFunction,
+            "POST /v1/persons": createPersonFunction,
         }
     });
+
     stack.addOutputs({
         ApiEndpoint: api.url,
       });

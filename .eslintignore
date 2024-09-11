@@ -1,0 +1,17 @@
+# dependecies
+node_modules
+
+# ide
+.vscode
+
+# husky
+.husky
+
+# All built JS code
+**/*.js
+
+# sst
+.sst
+.build
+
+.json
