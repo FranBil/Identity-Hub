@@ -55,7 +55,7 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	var persons []formats.PersonRequest
 	err = dynamodbattribute.UnmarshalMap(result.Item, &persons)
 	if err != nil {
-		log.Error().Msg("Error unmarshalling items: %s" err)
+		log.Error().Msg("Error unmarshalling items: %s", err)
 		return nil, fmt.Errorf("error unmarshalling map: %s", err)
 	}
 	return persons, nil
