@@ -49,20 +49,20 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 		}
 		errBody, err := json.Marshal(data)
 		if err != nil {
-			log.Error().Msg("BadGateway error in saving person info: %s", err)
+			log.Error().Err(err).Msg("BadGateway error in saving person info")
 			return badGateway(errBody, err)
 		}
 	} else {
 		err = dynamodb.SavePersonInfo(item)
 		if err != nil {
-			log.Error().Msg("Error saving person info: %s", err)
+			log.Error().Err(err).Msg("Error saving person info")
 			return response{
 				StatusCode: 500,
 				Body:       fmt.Sprintf("Error saving person info: %s", err),
 			}, nil
 		}
 	}
-	log.Info().Msg("Successfully saved body: %s", item)
+	log.Info().Msg("Successfully saved body: %s", fmt.Sprint(items))
 	return response{
 		StatusCode: 200,
 		Body:       "Person info saved successfully",
