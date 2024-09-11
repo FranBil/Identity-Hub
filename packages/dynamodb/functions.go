@@ -2,8 +2,8 @@ package dynamodb
 
 import (
 	"fmt"
-	"identity-hub/packages/formats"
 	"github.com/rs/zerolog/log"
+	"identity-hub/packages/formats"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -11,16 +11,19 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-
-var sess = session.Must(session.NewSessionWithOptions(session.Options{
-	SharedConfigState: session.SharedConfigEnable,
-}))
-
-var svc = dynamodb.New(sess)
-
 var tableName = "PersonsTable"
 
 func SavePersonInfo(person formats.PersonRequest) error {
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("eu-west-1")},
+	)
+
+	if err != nil {
+		log.Error().Err(err).Msg("Got error creating session")
+	}
+
+	svc := dynamodb.New(sess)
+
 	item, err := dynamodbattribute.MarshalMap(person)
 
 	if err != nil {
@@ -41,22 +44,37 @@ func SavePersonInfo(person formats.PersonRequest) error {
 }
 
 func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
-	result, err := svc.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String(tableName),
-	})
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String("eu-west-1")},
+	)
+
 	if err != nil {
-		log.Error().Err(err).Msg("Got error calling GetItem")
-		return nil, fmt.Errorf("Error getting Items: %s", err)
+		log.Error().Err(err).Msg("Got error creating session")
 	}
 
-	if result.Item == nil {
-		return nil, nil
+	svc := dynamodb.New(sess)
+	params := &dynamodb.ScanInput{
+		TableName: aws.String(tableName),
 	}
-	var persons []formats.PersonRequest
-	err = dynamodbattribute.UnmarshalMap(result.Item, &persons)
+
+	result, err := svc.Scan(params)
 	if err != nil {
-		log.Error().Err(err).Msg("Error unmarshalling items")
-		return nil, fmt.Errorf("error unmarshalling map: %s", err)
+		log.Error().Err(err).Msg("Got error calling Scan")
+		return nil, fmt.Errorf("Error scanning Items: %s", err)
 	}
-	return persons, nil
+
+	item := []formats.PersonRequest{}
+	for _, i := range result.Items {
+		var pr formats.PersonRequest
+
+		err = dynamodbattribute.UnmarshalMap(i, &pr)
+
+		if err != nil {
+			log.Error().Err(err).Msg("Got error unmarshalling")
+		}
+		item = append(item, pr)
+
+	}
+
+	return item, nil
 }
