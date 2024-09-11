@@ -45,7 +45,7 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 		TableName: aws.String(tableName),
 	})
 	if err != nil {
-		log.Error().Msg("Got error calling GetItem: %s", err)
+		log.Error().Err(err).Msg("Got error calling GetItem")
 		return nil, fmt.Errorf("Error getting Items: %s", err)
 	}
 
@@ -55,7 +55,7 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	var persons []formats.PersonRequest
 	err = dynamodbattribute.UnmarshalMap(result.Item, &persons)
 	if err != nil {
-		log.Error().Msg("Error unmarshalling items: %s", err)
+		log.Error().Err(err).Msg("Error unmarshalling items")
 		return nil, fmt.Errorf("error unmarshalling map: %s", err)
 	}
 	return persons, nil
