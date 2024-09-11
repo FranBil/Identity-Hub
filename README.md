@@ -9,9 +9,10 @@ Identity-Hub is a serverless application built with GoLang and TypeScript using 
 ## Folder Structure
 
 The following directories are the most important ones in the project:
-- `packages/functions`: Contains the Lambda function that is triggered by API Gateway.
-- `packages/core`: Contains the data model.
-- `service`: Contains services shared between the stack code and the packages.
+
+- `packages/lamdba`: Contains the Lambda function that is triggered by API Gateway.
+- `packages/dynamodb`: Contains DB functions.
+- `packages/formats`: Contains the data types and functions for validation.
 - `stacks`: Contains the CDK stacks that define the infrastructure of the application.
 
 ## Setup
