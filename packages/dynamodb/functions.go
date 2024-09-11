@@ -29,7 +29,6 @@ func SavePersonInfo(person formats.PersonRequest) error {
 	if err != nil {
 		return fmt.Errorf("error marshalling map: %s", err)
 	}
-	fmt.Println("__________: ",item)
 
 	input := &dynamodb.PutItemInput{
 		Item:      item,
