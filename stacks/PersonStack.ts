@@ -1,4 +1,5 @@
-import { Api, Function, StackContext, Table } from "sst/constructs";
+import { Api, Function, StackContext, Table, Topic } from "sst/constructs";
+// import * as sns from "aws-cdk-lib/aws-sns";
 
 export function PersonApiStack({ stack }: StackContext) {
     const personsTable = new Table(stack, "PersonsTable", {
@@ -15,6 +16,8 @@ export function PersonApiStack({ stack }: StackContext) {
         },
         primaryIndex: { partitionKey: "lastName", sortKey: "phoneNumber" },
     });
+
+    const personCreatedTopic = new Topic(stack, "PersonCreatedTopic");
 
     const listPersonFunction = new Function(stack, "GetAllPersons", {
         handler: "packages/lambda/list-persons/main.go",
@@ -33,7 +36,7 @@ export function PersonApiStack({ stack }: StackContext) {
         environment: {
             TABLE_NAME: "PersonsTable"
         },
-        bind: [personsTable]
+        bind: [personsTable, personCreatedTopic]
     });
 
     const api = new Api(stack, "Api", {

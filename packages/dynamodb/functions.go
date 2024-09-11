@@ -3,14 +3,12 @@ package dynamodb
 import (
 	"fmt"
 	"identity-hub/packages/formats"
+	"log"
 
-	// "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-	// "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
-	// "github.com/google/uuid"
 )
 
 
@@ -18,15 +16,12 @@ var sess = session.Must(session.NewSessionWithOptions(session.Options{
 	SharedConfigState: session.SharedConfigEnable,
 }))
 
-// Create DynamoDB client
 var svc = dynamodb.New(sess)
 
 var tableName = "PersonsTable"
 
 func SavePersonInfo(person formats.PersonRequest) error {
 	item, err := dynamodbattribute.MarshalMap(person)
-	// item["id"] = &types.AttributeValueMemberS{Value: uuid.New().String()} 
-	// item["id"] = &dynamodb.AttributeValue{Value: "1"} 
 
 	if err != nil {
 		return fmt.Errorf("error marshalling map: %s", err)
@@ -44,19 +39,22 @@ func SavePersonInfo(person formats.PersonRequest) error {
 	return nil
 }
 
-// func GetAllPersonsInfo() ([]PersonInfo, error) {
-// 	result, err := svc.GetItem(&dynamodb.GetItemInput{
-// 		TableName: aws.String(tableName),
-// 		Key: map[string]*dynamodb.AttributeValue{
-// 			"Year": {
-// 				N: aws.String(movieYear),
-// 			},
-// 			"Title": {
-// 				S: aws.String(movieName),
-// 			},
-// 		},
-// 	})
-// 	if err != nil {
-// 		log.Fatalf("Got error calling GetItem: %s", err)
-// 	}
-// }
+func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
+	result, err := svc.GetItem(&dynamodb.GetItemInput{
+		TableName: aws.String(tableName),
+	})
+	if err != nil {
+		log.Fatalf("Got error calling GetItem: %s", err)
+		return nil, fmt.Errorf("Error getting Items: %s", err)
+	}
+
+	if result.Item == nil {
+		return nil, nil
+	}
+	var persons []formats.PersonRequest
+	err = dynamodbattribute.UnmarshalMap(result.Item, &persons)
+	if err != nil {
+		return nil, fmt.Errorf("error unmarshalling map: %s", err)
+	}
+	return persons, nil
+}

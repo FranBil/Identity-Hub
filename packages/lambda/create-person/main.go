@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"identity-hub/packages/dynamodb"
@@ -23,7 +24,6 @@ func badGateway(body []byte, err error) (response, error) {
 
 func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 	var personRequest formats.PersonRequest
-	// var person dynamodb.PersonInfo
 
 	err := json.Unmarshal([]byte(request.Body), &personRequest)
 
@@ -49,17 +49,20 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 		}
 		errBody, err := json.Marshal(data)
 		if err != nil {
+			log.Println("BadGateway error in saving person info: %s", err)
 			return badGateway(errBody, err)
 		}
 	} else {
 		err = dynamodb.SavePersonInfo(item)
 		if err != nil {
+			log.Println("Error saving person info: %s", err)
 			return response{
 				StatusCode: 500,
 				Body:       fmt.Sprintf("Error saving person info: %s", err),
 			}, nil
 		}
 	}
+	log.Println("Successfully saved body: %s", item)
 	return response{
 		StatusCode: 200,
 		Body:       "Person info saved successfully",
