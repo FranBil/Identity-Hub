@@ -1,6 +1,6 @@
 module identity-hub
 
-go 1.21
+go 1.18
 
 require (
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.157.0
