@@ -2,8 +2,6 @@ module identity-hub
 
 go 1.21
 
-toolchain go1.21.0
-
 require (
 	github.com/aws/aws-cdk-go/awscdk/v2 v2.157.0
 	github.com/aws/aws-lambda-go v1.47.0
