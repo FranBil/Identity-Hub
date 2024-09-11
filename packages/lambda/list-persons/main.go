@@ -14,7 +14,7 @@ type response events.APIGatewayProxyResponse
 func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 	items, err := dynamodb.GetAllPersonsInfo()
 	if err != nil {
-		log.Error().Msg("Error Getting Persons: %s", err)
+		log.Error().Err(err).Msg("Error Getting Persons")
 		return response{StatusCode: 500}, err
 	}
 
