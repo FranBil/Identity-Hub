@@ -11,12 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// var sess = session.Must(session.NewSessionWithOptions(session.Options{
-// 	SharedConfigState: session.SharedConfigEnable,
-// }))
-
-// var svc = dynamodb.New(sess)
-
 var tableName = "PersonsTable"
 
 func SavePersonInfo(person formats.PersonRequest) error {
@@ -28,7 +22,6 @@ func SavePersonInfo(person formats.PersonRequest) error {
 		log.Error().Err(err).Msg("Got error creating session")
 	}
 
-	// Create DynamoDB client
 	svc := dynamodb.New(sess)
 
 	item, err := dynamodbattribute.MarshalMap(person)
@@ -60,24 +53,6 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	}
 
 	svc := dynamodb.New(sess)
-
-	// result, err := svc.GetItem(&dynamodb.GetItemInput{
-	// 	TableName: aws.String(tableName),
-	// })
-	// if err != nil {
-	// 	log.Error().Err(err).Msg("Got error calling GetItem")
-	// 	return nil, fmt.Errorf("Error getting Items: %s", err)
-	// }
-
-	// if result.Item == nil {
-	// 	return nil, nil
-	// }
-	// var persons []formats.PersonRequest
-	// err = dynamodbattribute.UnmarshalMap(result.Item, &persons)
-	// if err != nil {
-	// 	log.Error().Err(err).Msg("Error unmarshalling items")
-	// 	return nil, fmt.Errorf("error unmarshalling map: %s", err)
-	// }
 	params := &dynamodb.ScanInput{
 		TableName: aws.String(tableName),
 	}
