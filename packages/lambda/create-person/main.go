@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"github.com/rs/zerolog/log"
 	"net/http"
 
 	"identity-hub/packages/dynamodb"
@@ -49,20 +49,20 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 		}
 		errBody, err := json.Marshal(data)
 		if err != nil {
-			log.Println("BadGateway error in saving person info: %s", err)
+			log.Error().Err(err).Msg("BadGateway error in saving person info")
 			return badGateway(errBody, err)
 		}
 	} else {
 		err = dynamodb.SavePersonInfo(item)
 		if err != nil {
-			log.Println("Error saving person info: %s", err)
+			log.Error().Err(err).Msg("Error saving person info")
 			return response{
 				StatusCode: 500,
 				Body:       fmt.Sprintf("Error saving person info: %s", err),
 			}, nil
 		}
 	}
-	log.Println("Successfully saved body: %s", item)
+	log.Info().Msg("Successfully saved body:" + fmt.Sprint(item))
 	return response{
 		StatusCode: 200,
 		Body:       "Person info saved successfully",

@@ -3,7 +3,7 @@ package dynamodb
 import (
 	"fmt"
 	"identity-hub/packages/formats"
-	"log"
+	"github.com/rs/zerolog/log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -34,6 +34,7 @@ func SavePersonInfo(person formats.PersonRequest) error {
 
 	_, err = svc.PutItem(input)
 	if err != nil {
+		log.Error().Err(err).Msg("Error saving person info")
 		return fmt.Errorf("error inserting Item: %s", err)
 	}
 	return nil
@@ -44,7 +45,7 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 		TableName: aws.String(tableName),
 	})
 	if err != nil {
-		log.Fatalf("Got error calling GetItem: %s", err)
+		log.Error().Err(err).Msg("Got error calling GetItem")
 		return nil, fmt.Errorf("Error getting Items: %s", err)
 	}
 
@@ -54,6 +55,7 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	var persons []formats.PersonRequest
 	err = dynamodbattribute.UnmarshalMap(result.Item, &persons)
 	if err != nil {
+		log.Error().Err(err).Msg("Error unmarshalling items")
 		return nil, fmt.Errorf("error unmarshalling map: %s", err)
 	}
 	return persons, nil

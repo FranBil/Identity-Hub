@@ -27,4 +27,7 @@ require (
 	golang.org/x/tools v0.24.0 // indirect
 )
 
-require github.com/jmespath/go-jmespath v0.4.0 // indirect
+require (
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
+	github.com/rs/zerolog v1.33.0
+)
