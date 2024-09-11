@@ -8,13 +8,12 @@ export function PersonApiStack({ stack }: StackContext) {
             },
         },
         fields: {
-            id: "string",
             firstName: "string",
             lastName: "string",
             phoneNumber: "string",
             address: "string",
         },
-        primaryIndex: { partitionKey: "id" },
+        primaryIndex: { partitionKey: "lastName", sortKey: "phoneNumber" },
     });
 
     const listPersonFunction = new Function(stack, "GetAllPersons", {

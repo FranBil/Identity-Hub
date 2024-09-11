@@ -2,19 +2,17 @@ package dynamodb
 
 import (
 	"fmt"
+	"identity-hub/packages/formats"
 
+	// "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	// "github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	// "github.com/google/uuid"
 )
 
-type PersonInfo struct {
-	FirstName   string `json:"firstName"`
-	LastName    string `json:"lastName"`
-	PhoneNumber string `json:"phoneNumber"`
-	Address     string `json:"address"`
-}
 
 var sess = session.Must(session.NewSessionWithOptions(session.Options{
 	SharedConfigState: session.SharedConfigEnable,
@@ -25,8 +23,11 @@ var svc = dynamodb.New(sess)
 
 var tableName = "PersonsTable"
 
-func SavePersonInfo(person PersonInfo) error {
+func SavePersonInfo(person formats.PersonRequest) error {
 	item, err := dynamodbattribute.MarshalMap(person)
+	// item["id"] = &types.AttributeValueMemberS{Value: uuid.New().String()} 
+	// item["id"] = &dynamodb.AttributeValue{Value: "1"} 
+
 	if err != nil {
 		return fmt.Errorf("error marshalling map: %s", err)
 	}
