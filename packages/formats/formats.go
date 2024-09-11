@@ -6,10 +6,10 @@ import (
 )
 
 type PersonRequest struct {
-	FirstName   string
-	LastName    string
-	PhoneNumber string 
-	Address     string
+	FirstName   string `json:"firstName"`
+	LastName    string	`json:"lastName"`
+	PhoneNumber string	`json:"phoneNumber"`
+	Address     string	`json:"address"`
 }
 
 func (personRequest PersonRequest) validateFirstName() (flag bool, err error) {
