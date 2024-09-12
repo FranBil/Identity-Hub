@@ -4,7 +4,7 @@ Identity-Hub is a serverless application built with GoLang and TypeScript using 
 
 ## Project structure
 
-![Architecture diagram](./IHUB.jpg)
+![Architecture diagram](./IHUB-1.jpg)
 
 ## Folder Structure
 
