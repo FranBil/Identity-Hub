@@ -24,7 +24,7 @@ export function PersonApiStack({ stack }: StackContext) {
               detailType: ["PersonCreated"],
             },
             targets: {
-                personArn: "packages/lambda/create-person/main.go",
+                personArn: "./packages/lambda/create-person/main.go",
             },
           },
         },
