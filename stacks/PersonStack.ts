@@ -24,7 +24,7 @@ export function PersonApiStack({ stack }: StackContext) {
               detailType: ["PersonCreated"],
             },
             targets: {
-                personArn: "arn:aws:lambda:eu-west-1:185507759994:function:prod-Identity-Hub-PersonApiSt-CreatePerson51F8A8F8-I7tr3DN1qMqg",
+                personArn: "packages/lambda/create-person/main.go",
             },
           },
         },
