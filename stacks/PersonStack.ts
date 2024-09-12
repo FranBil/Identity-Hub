@@ -1,5 +1,4 @@
-import { Api, Function, StackContext, Table, Topic } from "sst/constructs";
-// import * as sns from "aws-cdk-lib/aws-sns";
+import { Api, EventBus, Function, StackContext, Table } from "sst/constructs";
 
 export function PersonApiStack({ stack }: StackContext) {
     const personsTable = new Table(stack, "PersonsTable", {
@@ -17,7 +16,16 @@ export function PersonApiStack({ stack }: StackContext) {
         primaryIndex: { partitionKey: "lastName", sortKey: "phoneNumber" },
     });
 
-    const personCreatedTopic = new Topic(stack, "PersonCreatedTopic");
+    const bus = new EventBus(stack, "PersonEventBus", {
+        rules: {
+          personCreatedRule: {
+            pattern: {
+              source: ["com.example.identity_hub"],
+              detailType: ["PersonCreated"],
+            },
+          },
+        },
+      });
 
     const listPersonFunction = new Function(stack, "GetAllPersons", {
         handler: "packages/lambda/list-persons/main.go",
@@ -36,7 +44,7 @@ export function PersonApiStack({ stack }: StackContext) {
         environment: {
             TABLE_NAME: "PersonsTable"
         },
-        bind: [personsTable, personCreatedTopic]
+        bind: [personsTable, bus]
     });
 
     const api = new Api(stack, "Api", {

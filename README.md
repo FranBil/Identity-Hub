@@ -18,5 +18,6 @@ The following directories are the most important ones in the project:
 ## Setup
 
 In order to run the project, you can run:
-- Install the dependecies with: `npm install`
-- Setup AWS credentials with: `aws sso login`
+
+- Install the dependecies with: `npm install`.
+- Setup AWS credentials with: `aws sso login`.

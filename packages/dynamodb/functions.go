@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
+	"github.com/aws/aws-sdk-go/service/eventbridge"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
@@ -77,4 +78,30 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	}
 
 	return item, nil
+}
+
+func PublishToEventBridge(eventDetail string) error {
+	sess := session.Must(session.NewSession())
+	svc := eventbridge.New(sess)
+
+	input := &eventbridge.PutEventsInput{
+		Entries: []*eventbridge.PutEventsRequestEntry{
+			{
+				EventBusName: aws.String("PersonEventBus"),
+				Source:       aws.String("com.example.identity_hub"),
+				DetailType:   aws.String("PersonCreated"),
+				Detail:       aws.String(eventDetail),
+			},
+		},
+	}
+
+	// Publish the event
+	result, err := svc.PutEvents(input)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to send event")
+		return fmt.Errorf("failed to send event: %v", err)
+	}
+
+	fmt.Printf("Event sent successfully: %v\n", result)
+	return nil
 }
