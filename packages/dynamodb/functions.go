@@ -28,6 +28,7 @@ func SavePersonInfo(person formats.PersonRequest) error {
 	item, err := dynamodbattribute.MarshalMap(person)
 
 	if err != nil {
+		log.Error().Err(err).Msg("Got error marshalling item")
 		return fmt.Errorf("error marshalling map: %s", err)
 	}
 
@@ -102,6 +103,6 @@ func PublishToEventBridge(eventDetail string) error {
 		return fmt.Errorf("failed to send event: %v", err)
 	}
 
-	fmt.Printf("Event sent successfully: %v\n", result)
+	log.Info().Msgf("Event sent successfully: %v\n", result)
 	return nil
 }

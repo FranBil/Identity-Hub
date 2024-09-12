@@ -23,12 +23,10 @@ export function PersonApiStack({ stack }: StackContext) {
               source: ["com.example.identity_hub"],
               detailType: ["PersonCreated"],
             },
-            targets: {
-                personArn: "packages/lambda/create-person/main.go",
-            },
           },
         },
       });
+      bus.attachPermissions(["lambda"])
 
     const listPersonFunction = new Function(stack, "GetAllPersons", {
         handler: "packages/lambda/list-persons/main.go",
