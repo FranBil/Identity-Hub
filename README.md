@@ -24,3 +24,17 @@ In order to run the project, you can run:
 
 - Install the dependencies with: `npm install`.
 - Setup AWS credentials with: `aws sso login`.
+
+## Testing 
+To run the tests, you can use the following command:
+
+- ```curl -X POST https://hygomisjoi.execute-api.eu-west-1.amazonaws.com/v1/persons \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "John",
+    "lastName": "Doe",
+    "phoneNumber": "1234567890",
+    "address": "123 Main St"
+  }'```
+
+- `curl -X GET https://hygomisjoi.execute-api.eu-west-1.amazonaws.com/v1/persons`
