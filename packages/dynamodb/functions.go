@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go/service/eventbridge"
 )
 
 var tableName = "PersonsTable"
@@ -27,6 +28,7 @@ func SavePersonInfo(person formats.PersonRequest) error {
 	item, err := dynamodbattribute.MarshalMap(person)
 
 	if err != nil {
+		log.Error().Err(err).Msg("Got error marshalling item")
 		return fmt.Errorf("error marshalling map: %s", err)
 	}
 
@@ -60,7 +62,7 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	result, err := svc.Scan(params)
 	if err != nil {
 		log.Error().Err(err).Msg("Got error calling Scan")
-		return nil, fmt.Errorf("Error scanning Items: %s", err)
+		return nil, fmt.Errorf("error scanning Items: %s", err)
 	}
 
 	item := []formats.PersonRequest{}
@@ -77,4 +79,29 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	}
 
 	return item, nil
+}
+
+func PublishToEventBridge(eventDetail string) error {
+	sess := session.Must(session.NewSession())
+	svc := eventbridge.New(sess)
+
+	input := &eventbridge.PutEventsInput{
+		Entries: []*eventbridge.PutEventsRequestEntry{
+			{
+				EventBusName: aws.String("PersonEventBus"),
+				Source:       aws.String("com.example.identity_hub"),
+				DetailType:   aws.String("PersonCreated"),
+				Detail:       aws.String(eventDetail),
+			},
+		},
+	}
+
+	result, err := svc.PutEvents(input)
+	if err != nil {
+		log.Error().Err(err).Msg("failed to send event")
+		return fmt.Errorf("failed to send event: %v", err)
+	}
+
+	log.Info().Msgf("Event sent successfully: %v\n", result)
+	return nil
 }

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"identity-hub/packages/dynamodb"
 	"github.com/rs/zerolog/log"
+	"identity-hub/packages/dynamodb"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -18,9 +18,9 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 		return response{StatusCode: 500}, err
 	}
 
-	log.Info().Msg("Successfully fetched Persons: "+ fmt.Sprint(items))
+	log.Info().Msg("Successfully fetched Persons: " + fmt.Sprint(items))
 	return response{
-		Body: fmt.Sprint(items),
+		Body:       fmt.Sprint(items),
 		StatusCode: 200,
 	}, nil
 }

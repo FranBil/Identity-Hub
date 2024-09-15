@@ -7,9 +7,9 @@ import (
 
 type PersonRequest struct {
 	FirstName   string `json:"firstName"`
-	LastName    string	`json:"lastName"`
-	PhoneNumber string	`json:"phoneNumber"`
-	Address     string	`json:"address"`
+	LastName    string `json:"lastName"`
+	PhoneNumber string `json:"phoneNumber"`
+	Address     string `json:"address"`
 }
 
 func (personRequest PersonRequest) validateFirstName() (flag bool, err error) {
@@ -17,7 +17,7 @@ func (personRequest PersonRequest) validateFirstName() (flag bool, err error) {
 		flag = false
 		err = errors.New("first name is required")
 		return
-		}
+	}
 	flag = true
 	return
 }
@@ -67,21 +67,21 @@ func (personRequest PersonRequest) IsValid() (bool, []error) {
 	if firstNameErr != nil {
 		errorList = append(errorList, firstNameErr)
 	}
-	
+
 	lastNameFlag, lastNameErr := personRequest.validateLastName()
 	if lastNameErr != nil {
 		errorList = append(errorList, lastNameErr)
-		}
+	}
 
 	phoneNumberFlag, phoneNumberErr := personRequest.validatePhoneNumber()
 	if phoneNumberErr != nil {
 		errorList = append(errorList, phoneNumberErr)
-		}
+	}
 
 	addressFlag, addressErr := personRequest.validateAddress()
 	if addressErr != nil {
 		errorList = append(errorList, addressErr)
-		}
+	}
 
 	return (firstNameFlag && lastNameFlag && addressFlag && phoneNumberFlag), errorList
 }

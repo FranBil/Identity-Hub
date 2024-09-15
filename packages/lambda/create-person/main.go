@@ -61,6 +61,11 @@ func handler(request events.APIGatewayV2HTTPRequest) (response, error) {
 				Body:       fmt.Sprintf("Error saving person info: %s", err),
 			}, nil
 		}
+		err = dynamodb.PublishToEventBridge(fmt.Sprint(item))
+		if err != nil {
+			log.Error().Err(err).Msg("Error publishing to event bridge")
+
+		}
 	}
 	log.Info().Msg("Successfully saved body:" + fmt.Sprint(item))
 	return response{
