@@ -8,8 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/eventbridge"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/aws/aws-sdk-go/service/eventbridge"
 )
 
 var tableName = "PersonsTable"
@@ -62,7 +62,7 @@ func GetAllPersonsInfo() ([]formats.PersonRequest, error) {
 	result, err := svc.Scan(params)
 	if err != nil {
 		log.Error().Err(err).Msg("Got error calling Scan")
-		return nil, fmt.Errorf("Error scanning Items: %s", err)
+		return nil, fmt.Errorf("error scanning Items: %s", err)
 	}
 
 	item := []formats.PersonRequest{}
@@ -96,7 +96,6 @@ func PublishToEventBridge(eventDetail string) error {
 		},
 	}
 
-	// Publish the event
 	result, err := svc.PutEvents(input)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to send event")

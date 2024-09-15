@@ -26,7 +26,7 @@ export function PersonApiStack({ stack }: StackContext) {
           },
         },
       });
-      bus.attachPermissions(["lambda"])
+    //   bus.cdk.eventBus.grantPutEventsTo("packages/lambda/create-person/main.go")
 
     const listPersonFunction = new Function(stack, "GetAllPersons", {
         handler: "packages/lambda/list-persons/main.go",
