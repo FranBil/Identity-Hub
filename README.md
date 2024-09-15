@@ -1,7 +1,7 @@
 Identity-Hub
 ============
 
-[![Build Status](https://github.com/FranBil/Identity-Hub/actions/workflows/deploy.yml/badge.svg?branch=main)]
+![Build Status](https://github.com/FranBil/Identity-Hub/actions/workflows/deploy.yml/badge.svg?branch=main)
 
 Identity-Hub is a serverless application built with GoLang and TypeScript using [Serverless Stack](https://sst.dev) (SST). The service exposes endpoints to manage Person Information.
 
